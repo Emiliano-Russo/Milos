@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         gayStatusSlider = GameObject.FindGameObjectWithTag("gayStatus").GetComponent<Slider>();
         pingTxt = GameObject.FindGameObjectWithTag("ping").GetComponent<Text>();
         gayStatusValue = 10;
@@ -37,8 +38,12 @@ public class Player : MonoBehaviour
     {
         if (!myPhotonView.IsMine)
             return;
+        gayStatusSlider.value = gayStatusValue;
         pingTxt.text = NetworkManager.instance.GetPing().ToString() + " ms";
     }
+
+    public void TakeGayPoints(float amount) => gayStatusValue += amount;
+   
 
 
 }
