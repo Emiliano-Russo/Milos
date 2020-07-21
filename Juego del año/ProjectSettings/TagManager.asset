@@ -5,8 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - lifeStats
   - ping
+  - gayStatus
+  - lifeStats
   layers:
   - Default
   - TransparentFX
