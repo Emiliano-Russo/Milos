@@ -271,7 +271,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+  m_Color: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -838,6 +838,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   searchRadius: 15
+  gayPointsDamage: 0.2
 --- !u!114 &1829087409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1525,6 +1526,7 @@ MonoBehaviour:
   DisableThings:
   - {fileID: 8099924896672655554}
   - {fileID: 8099924896672655555}
+  name3D: {fileID: 0}
 --- !u!143 &3020426237571324760
 CharacterController:
   m_ObjectHideFlags: 0

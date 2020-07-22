@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
 
     public Behaviour[] DisableThings;
-
+    public GameObject name3D;
 
     private PhotonView myPhotonView;
     private float gayStatusValue;
@@ -19,31 +19,48 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        gayStatusSlider = GameObject.FindGameObjectWithTag("gayStatus").GetComponent<Slider>();
-        pingTxt = GameObject.FindGameObjectWithTag("ping").GetComponent<Text>();
-        gayStatusValue = 10;
-        gayStatusSlider.value = gayStatusValue;
         myPhotonView = this.GetComponent<PhotonView>();
-        if (!myPhotonView.IsMine)
-        { 
-            //disable my things (if im not localPlayer)
+        if (!myPhotonView.IsMine) // im not local player
+        {
+            name3D.GetComponent<TextMesh>().text = GetComponent<PhotonView>().Owner.NickName;
+            //disable clone player things
             foreach (var item in DisableThings)
                 item.gameObject.SetActive(false);
+        }
+        else //im local player
+        {
+            Config_Cursor();
+            Initialize_Values();          
         }
     }
 
     public void Update()
-    {
-        if (!myPhotonView.IsMine)
-            return;
-        gayStatusSlider.value = gayStatusValue;
-        pingTxt.text = NetworkManager.instance.GetPing().ToString() + " ms";
+    {      
+        if (!myPhotonView.IsMine)// if im not local player        
+            name3D.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);        
+        else // if im local player
+        {
+            gayStatusSlider.value = gayStatusValue;
+            pingTxt.text = NetworkManager.instance.GetPing().ToString() + " ms";
+        }
     }
 
     public void TakeGayPoints(float amount) => gayStatusValue += amount;
-   
+
+    private void Initialize_Values()
+    {     
+        gayStatusSlider = GameObject.FindGameObjectWithTag("gayStatus").GetComponent<Slider>();
+        pingTxt = GameObject.FindGameObjectWithTag("ping").GetComponent<Text>();
+        gayStatusValue = 10;
+        gayStatusSlider.value = gayStatusValue;
+        name3D.SetActive(false);
+    }
+
+    private void Config_Cursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
 
 }

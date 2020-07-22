@@ -13,20 +13,26 @@ public class Menu : MonoBehaviourPunCallbacks
     public InputField hostTxtInput;
     public InputField joinTxtInput;
     public InputField nickName;
-
-
     public GameObject mainMenu;
     public GameObject createRoomMenu;
     public GameObject ServerListMenu;
-
     public GameObject serverEntity;
     public GameObject _serverContainer;
-
     public Dropdown AmountPlayers;
+    public GameObject loadingScreen;
+    public Dropdown resolutionDropDown;
+    public GameObject optionsMenu;
+    public Toggle fullscreen;
+
+    private Resolution[] resolutions;
 
     private void Awake() => PhotonNetwork.AutomaticallySyncScene = true;
 
-    private void Start() => PhotonNetwork.ConnectUsingSettings();
+    private void Start()
+    {
+        resolutions = Screen.resolutions;
+        PhotonNetwork.ConnectUsingSettings();
+    }
 
 
     public void SetNickName()
@@ -42,6 +48,36 @@ public class Menu : MonoBehaviourPunCallbacks
         mainMenu.SetActive(true);
     }
 
+    public void OpenOptions_Menu()
+    {
+        mainMenu.SetActive(false);
+        optionsMenu.SetActive(true);
+        resolutionDropDown.ClearOptions();
+        List<string> options = new List<string>();
+
+        int currentResolutionIndex = 0;
+
+        for(int i = 0; i < resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + "x" + resolutions[i].height;
+            options.Add(option);
+            if (resolutions[i].width == Screen.currentResolution.width &&
+                resolutions[i].height == Screen.currentResolution.height)
+            {
+                currentResolutionIndex = i;
+            }
+        }
+        resolutionDropDown.AddOptions(options);
+        resolutionDropDown.value = currentResolutionIndex;
+        resolutionDropDown.RefreshShownValue();
+    }
+    public void ApplyGraphicsChanges()
+    {
+        Resolution resolution = resolutions[resolutionDropDown.value];
+        Screen.SetResolution(resolution.width, resolution.height, fullscreen.isOn);
+        VolverAlMenu();
+    }
+
     public void OpenMenu_RoomCreator()
     {
         mainMenu.SetActive(false);
@@ -55,6 +91,7 @@ public class Menu : MonoBehaviourPunCallbacks
 
         createRoomMenu.SetActive(false);
         ServerListMenu.SetActive(false);
+        optionsMenu.SetActive(false);
         mainMenu.SetActive(true);
     }
 
@@ -67,6 +104,8 @@ public class Menu : MonoBehaviourPunCallbacks
 
     public void StartRoom()
     {
+        createRoomMenu.SetActive(false);
+        loadingScreen.SetActive(true);
         byte amountOfPLayers = (byte)AmountPlayers.value;
         amountOfPLayers += 1;
         string HostRoomName = hostTxtInput.text;
@@ -99,6 +138,8 @@ public class Menu : MonoBehaviourPunCallbacks
 
     public void JoinRoom(string srvName)
     {
+        ServerListMenu.SetActive(false);
+        loadingScreen.SetActive(true);
         PhotonNetwork.NickName = nickName.text;
         string JoinRoomName = srvName;
         NetworkManager.instance.JoinRoom(JoinRoomName);
