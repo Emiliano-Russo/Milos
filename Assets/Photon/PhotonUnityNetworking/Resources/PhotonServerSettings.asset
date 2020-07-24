@@ -33,12 +33,10 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - CambiarColorARojo
+  - CambiarColorAVerde
   - ClickRpc
   - DestroyRpc
-  - CambiarColor
-  - CambiarColorAVerde
-  - CambiarColorARojo
-  - AumentarVida
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
