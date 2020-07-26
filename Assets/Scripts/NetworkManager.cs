@@ -73,6 +73,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         return PhotonNetwork.NickName;
     }
 
+    public void LeaveRoom() => PhotonNetwork.LeaveRoom();
     
 
 }

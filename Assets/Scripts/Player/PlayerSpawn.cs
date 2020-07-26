@@ -11,8 +11,6 @@ public class PlayerSpawn : MonoBehaviour
     [SerializeField]
     private GameObject spawnLocation;
 
-    [SerializeField]
-    private Canvas canvas;
 
 
 
@@ -20,6 +18,6 @@ public class PlayerSpawn : MonoBehaviour
     void Start()
     {
         PhotonNetwork.Instantiate(player.name, spawnLocation.transform.position, Quaternion.identity);
-        Instantiate(canvas);
+      //  Instantiate(canvas);
     }
 }

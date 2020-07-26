@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
+using Steamworks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ public class Menu : MonoBehaviourPunCallbacks
 {
     public InputField hostTxtInput;
     public InputField joinTxtInput;
-    public InputField nickName;
+    public GameObject nickNameSelector;
     public GameObject mainMenu;
     public GameObject createRoomMenu;
     public GameObject ServerListMenu;
@@ -32,21 +33,18 @@ public class Menu : MonoBehaviourPunCallbacks
     {
         resolutions = Screen.resolutions;
         PhotonNetwork.ConnectUsingSettings();
+        SetNickName();      
     }
 
 
     public void SetNickName()
     {
-        PhotonNetwork.NickName = nickName.text;
-        StartCoroutine(openMainMenuFromNickName()); 
+        if (!SteamManager.Initialized) { return; }
+        string name = SteamFriends.GetPersonaName();
+        Debug.Log(name);
+        PhotonNetwork.NickName = name;
     }
 
-    IEnumerator openMainMenuFromNickName()
-    {
-        yield return new WaitForSeconds(1);
-        GameObject.Find("Canvas/NickNameSelector").SetActive(false);
-        mainMenu.SetActive(true);
-    }
 
     public void OpenOptions_Menu()
     {
@@ -112,7 +110,14 @@ public class Menu : MonoBehaviourPunCallbacks
         NetworkManager.instance.CreateRoom(HostRoomName,amountOfPLayers);
     }
 
-    public void Close_Game() => Application.Quit();
+    public void Close_Game()
+    {
+        Application.Quit();
+    }
+    private void OnApplicationQuit()
+    {
+        SteamAPI.Shutdown();
+    }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList) // clave para listar los servers
     {
@@ -141,7 +146,6 @@ public class Menu : MonoBehaviourPunCallbacks
     {
         ServerListMenu.SetActive(false);
         loadingScreen.SetActive(true);
-        PhotonNetwork.NickName = nickName.text;
         string JoinRoomName = srvName;
         NetworkManager.instance.JoinRoom(JoinRoomName);
     }

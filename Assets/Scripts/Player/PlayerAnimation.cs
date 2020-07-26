@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,57 +7,54 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
 
-    Animator anim;
-    PhotonView myPhotonView;
+    private Animator anim;
+    private PhotonView myPhotonView;
     private PlayerMovement playerMovement;
     private float walkingVelocity;
+    private float standarAnimSpeed;
 
     // Start is called before the first frame update
     void Start()
     {
+        
         playerMovement = this.GetComponent<PlayerMovement>();
         walkingVelocity = playerMovement.speed;
         myPhotonView = this.GetComponent<PhotonView>();
         if (!myPhotonView.IsMine)
             return;
         anim = GetComponent<Animator>();
+        standarAnimSpeed = 1.5f;
+        anim.speed = standarAnimSpeed;
     }
 
 
     private bool shiftPressed;
-    private bool moveKeysPressed;
     void Update()
     {
         if (!myPhotonView.IsMine)
             return;
-        Check_shiftPressed();
-        Check_MoveKeysPressed();
+        CheckShiftPressed();
 
-        if (moveKeysPressed)
+        float x = Input.GetAxis("Horizontal");
+        float y = Input.GetAxis("Vertical");
+        anim.SetFloat("PosX", x);
+        anim.SetFloat("PosY", y);
+        if (y == 1 && shiftPressed)
         {
-            if (shiftPressed)
-            {
-                anim.SetBool("Running", true);
-                playerMovement.speed = walkingVelocity * 2;
-            }
-            else
-            {
-                anim.SetBool("Walking", true);
-                anim.SetBool("Running", false);
-                playerMovement.speed = walkingVelocity;
-            }
+            anim.speed = 1;
+            anim.SetBool("IsRunning", true);
+            playerMovement.speed = walkingVelocity * 2;
         }
         else
         {
-            print("se detiene");
-            anim.SetBool("Walking", false);
-            anim.SetBool("Running", false);
+            anim.speed = standarAnimSpeed;
+            anim.SetBool("IsRunning", false);
+            playerMovement.speed = walkingVelocity;
         }
-        print("ShiftPressed: " + shiftPressed);
-        print("MoveKeysPressed: " + moveKeysPressed);
+
     }
 
-    private void Check_shiftPressed()
+    private void CheckShiftPressed()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
             shiftPressed = true;
@@ -64,11 +62,13 @@ public class PlayerAnimation : MonoBehaviour
             shiftPressed = false;
     }
 
-    private void Check_MoveKeysPressed()
-    {
-        if (Input.GetKeyDown(KeyCode.W))
-            moveKeysPressed = true;
-        else if (Input.GetKeyUp(KeyCode.W))
-            moveKeysPressed = false;
-    }
+    public void ShowPistol() => anim.SetLayerWeight(1, 1);
+
+    public void HidePistol() => anim.SetLayerWeight(1, 0);
+
+    public void ShowFlashlight() => anim.SetLayerWeight(2, 1);
+
+    public void HideFlashlight() => anim.SetLayerWeight(2, 0);
+
+
 }

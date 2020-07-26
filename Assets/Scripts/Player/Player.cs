@@ -11,10 +11,12 @@ public class Player : MonoBehaviour
     public Behaviour[] DisableThings;
     public GameObject name3D;
 
+    public Slider gayStatusSlider;
+    public Text pingTxt;
+
     private PhotonView myPhotonView;
     private float gayStatusValue;
-    private Slider gayStatusSlider;
-    private Text pingTxt;
+ 
 
 
     private void Start()
@@ -30,7 +32,7 @@ public class Player : MonoBehaviour
         else //im local player
         {
             Config_Cursor();
-            Initialize_Values();          
+            Initialize_Values();
         }
     }
 
@@ -49,8 +51,6 @@ public class Player : MonoBehaviour
 
     private void Initialize_Values()
     {     
-        gayStatusSlider = GameObject.FindGameObjectWithTag("gayStatus").GetComponent<Slider>();
-        pingTxt = GameObject.FindGameObjectWithTag("ping").GetComponent<Text>();
         gayStatusValue = 10;
         gayStatusSlider.value = gayStatusValue;
         name3D.SetActive(false);

@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class MouseLook : MonoBehaviour
 {
-
-    public float mouseSensitivity = 100f;
+    [HideInInspector]
+    public float mouseSensitivity;
 
     public Transform playerBody;
 
@@ -14,22 +14,33 @@ public class MouseLook : MonoBehaviour
 
     public PhotonView pv;
 
-    public bool EnEntornoDePrueba = false;
+    public bool onMenu;
 
+    private void Start()
+    {
+        if (PlayerPrefs.HasKey("MouseSensibility"))
+            mouseSensitivity = PlayerPrefs.GetFloat("MouseSensibility");
+        else
+            mouseSensitivity = 100f;
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (!pv.IsMine && !EnEntornoDePrueba)
+        if (!pv.IsMine)
             return;
+
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 42f);
 
+        if (onMenu)
+            return;
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerBody.Rotate(Vector3.up * mouseX);
         
     }
+
 }
