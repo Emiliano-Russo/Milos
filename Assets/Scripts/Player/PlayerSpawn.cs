@@ -20,4 +20,9 @@ public class PlayerSpawn : MonoBehaviour
         PhotonNetwork.Instantiate(player.name, spawnLocation.transform.position, Quaternion.identity);
       //  Instantiate(canvas);
     }
+
+    private void Update()
+    {
+        
+    }
 }

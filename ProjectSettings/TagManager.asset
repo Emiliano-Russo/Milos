@@ -8,6 +8,7 @@ TagManager:
   - ping
   - gayStatus
   - lifeStats
+  - Milk
   layers:
   - Default
   - TransparentFX

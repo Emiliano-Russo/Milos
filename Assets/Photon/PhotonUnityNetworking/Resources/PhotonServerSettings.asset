@@ -37,6 +37,15 @@ MonoBehaviour:
   - CambiarColorAVerde
   - ClickRpc
   - DestroyRpc
+  - ShootMilk
+  - CheckShiftPressed
+  - ShowFlashlight
+  - ShowPistol
+  - HideEverthing
+  - DestroyThisTraba
+  - DestroyThisGameObject
+  - PlaySexySpeach
+  - Active_Sexy_Speach
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
